@@ -56,7 +56,7 @@ public:
             
 
             if (a == 1){
-                if (distance > 10){
+                if (distance > 3){
                     pubCmdvel.publish(cmd_vel);
                 }
                 else {
@@ -67,7 +67,7 @@ public:
                 }
             }
             else {
-                if (distance < 10){ 
+                if (distance < 15){ 
                     pubCmdvel.publish(cmd_vel);
                 }
                 else {
@@ -82,16 +82,16 @@ public:
     
     void turn(int b){
         if (b == 1){
-            cmd_vel.angular.z = 1.57; //1.57 라디안 = 90 도
+            cmd_vel.angular.z = 0.523599; //1.5708rad = 90deg/s, 0.523599rad = 30deg/s
         }
         
         else if (b == 2){
             cmd_vel.angular.z = -1.57;
         }
-        double t = 4.155;
+        double t = 3.0;
         start = clock();
         while (ros::ok()){
-            if (start < t){
+            if (start <= t){
                 pubCmdvel.publish(cmd_vel);
                 delay(30);
             }
