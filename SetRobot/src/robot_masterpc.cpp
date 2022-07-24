@@ -181,6 +181,18 @@ public:
                 ROS_INFO("Right Camera Publish\n");
                 pubRightCamera.publish(right);
             }
+            //회수 후 쟁반 테이블 도착
+            else if (status[0] == 3 && status[1] == 2){
+                ROS_INFO("Right Camera Publish\n");
+                pubRightCamera.publish(right);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
+            }
+            //회수 후 쟁반 테이블 도착
+            else if (status[0] == 4 && status[1] == 2){
+                ROS_INFO("Right Camera Publish\n");
+                pubRightCamera.publish(right);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
+            }
         }
     }
 
