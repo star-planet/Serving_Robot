@@ -171,7 +171,7 @@ public:
             }
 
             //1번 테이블 도착
-            else if (status[0] == 1 || status[0] == 3){
+            else if (status[0] == 1){
                 ROS_INFO("Left Camera Publish\n");
                 pubLeftCamera.publish(left);
             }
