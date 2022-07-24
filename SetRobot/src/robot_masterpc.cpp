@@ -168,7 +168,18 @@ public:
                 pubLeftCamera.publish(left);
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
-
+            //회수 후 쟁반 테이블 도착
+            else if (status[0] == 3 && status[1] == 2){
+                ROS_INFO("Right Camera Publish");
+                pubRightCamera.publish(right);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
+            }
+            //회수 후 쟁반 테이블 도착
+            else if (status[0] == 4 && status[1] == 2){
+                ROS_INFO("Right Camera Publish");
+                pubRightCamera.publish(right);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
+            }
             //1번 테이블 도착
             else if (status[0] == 1 || status[0] == 3){
                 ROS_INFO("Left Camera Publish");
@@ -178,18 +189,6 @@ public:
 
             //2번 테이블 도착
             else if (status[0] == 2 || status[0] == 4 || status[1] == 2){
-                ROS_INFO("Right Camera Publish");
-                pubRightCamera.publish(right);
-                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
-            }
-            //회수 후 쟁반 테이블 도착
-            else if (status[0] == 3 && status[1] == 2){
-                ROS_INFO("Right Camera Publish");
-                pubRightCamera.publish(right);
-                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
-            }
-            //회수 후 쟁반 테이블 도착
-            else if (status[0] == 4 && status[1] == 2){
                 ROS_INFO("Right Camera Publish");
                 pubRightCamera.publish(right);
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
@@ -231,6 +230,12 @@ public:
                 pubPlate.publish(backward);
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
+            //회수한 쟁반 테이블에 올려두기
+            else if (status[0] == 3 && status[1] == 2){
+                pubPlate.publish(forward);
+                status[1] = 3;
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
+            }
             //1번 테이블 or 2번 테이블 서빙
             else if (status[0] == 1 || status[0] == 2){
                 ROS_INFO("Plate Forward Publish\n");
@@ -243,12 +248,6 @@ public:
                 ROS_INFO("Plate Forward Publish\n");
                 pubPlate.publish(backward);
                 status[2] = 0;
-                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
-            }
-            //회수한 쟁반 테이블에 올려두기
-            else if (status[1] == 2){
-                pubPlate.publish(forward);
-                status[1] = 3;
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
         }
