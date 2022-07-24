@@ -124,8 +124,7 @@ public:
                 pubPoseStamped.publish(poseStampedTable[2]);
                 status[0] = 1;
                 status[1] = 1;
-                ROS_INFO("Robot status = %d", status[0]);
-                ROS_INFO("Plate table status = %d\n", status[1]);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 resetFile();
             }
 
@@ -135,8 +134,7 @@ public:
                 pubPoseStamped.publish(poseStampedTable[2]);
                 status[0] = 2;
                 status[1] = 1;
-                ROS_INFO("Robot status = %d", status[0]);
-                ROS_INFO("Plate table status = %d\n", status[1]);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 resetFile();
             }
 
@@ -145,7 +143,7 @@ public:
                 ROS_INFO("Pick up to table 1");
                 pubPoseStamped.publish(poseStampedTable[0]);
                 status[0] = 3;
-                ROS_INFO("status[0] = %d\n", status[0]);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 resetFile();
             }
 
@@ -154,7 +152,7 @@ public:
                 ROS_INFO("Pick up to table 2");
                 pubPoseStamped.publish(poseStampedTable[1]);
                 status[0] = 4;
-                ROS_INFO("status[0] = %d\n", status[0]);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 resetFile();
             }
         }
@@ -166,30 +164,33 @@ public:
         if (arrival.status.status == 3){
             //쟁반 테이블 도착
             if (status[1] == 1){
-                ROS_INFO("Left Camera Publish\n");
+                ROS_INFO("Left Camera Publish");
                 pubLeftCamera.publish(left);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
 
             //1번 테이블 도착
             else if (status[0] == 1 || status[0] == 3){
-                ROS_INFO("Left Camera Publish\n");
+                ROS_INFO("Left Camera Publish");
                 pubLeftCamera.publish(left);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
 
             //2번 테이블 도착
             else if (status[0] == 2 || status[0] == 4 || status[1] == 2){
-                ROS_INFO("Right Camera Publish\n");
+                ROS_INFO("Right Camera Publish");
                 pubRightCamera.publish(right);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
             //회수 후 쟁반 테이블 도착
             else if (status[0] == 3 && status[1] == 2){
-                ROS_INFO("Right Camera Publish\n");
+                ROS_INFO("Right Camera Publish");
                 pubRightCamera.publish(right);
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
             //회수 후 쟁반 테이블 도착
             else if (status[0] == 4 && status[1] == 2){
-                ROS_INFO("Right Camera Publish\n");
+                ROS_INFO("Right Camera Publish");
                 pubRightCamera.publish(right);
                 ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
@@ -200,19 +201,22 @@ public:
         up.data = 3;
         down.data = 4;
         if (status[1] == 1 || status[1] == 2 || status[0] == 3 || status[0] == 4){
-            ROS_INFO("Lift Up Publish\n");
+            ROS_INFO("Lift Up Publish");
             pubLift.publish(up);
+            ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
         }
 
         else if (status[0] == 1 || status[0] == 2){
-            ROS_INFO("Lift Down Publish\n");
+            ROS_INFO("Lift Down Publish");
             pubLift.publish(down);
+            ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
         }
         //서빙 다 마치고 로봇 복귀
         else if (status[0] == 5){
             pubPoseStamped.publish(poseStampedTable[3]);
             status[0] = 0;
             status[1] = 0;
+            ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
         }
     }
 
@@ -223,25 +227,29 @@ public:
         if (lift.data == 10){
             //쟁반 테이블 들림
             if (status[1] == 1){
-                ROS_INFO("Plate Backward Publish\n");
+                ROS_INFO("Plate Backward Publish");
                 pubPlate.publish(backward);
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
             //1번 테이블 or 2번 테이블 서빙
             else if (status[0] == 1 || status[0] == 2){
                 ROS_INFO("Plate Forward Publish\n");
                 pubPlate.publish(forward);
                 status[2] = 1;
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
             //1번 테이블 or 2번 테이블 회수
             else if (status[0] == 3 || status[0] == 4){
                 ROS_INFO("Plate Forward Publish\n");
                 pubPlate.publish(backward);
                 status[2] = 0;
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
             //회수한 쟁반 테이블에 올려두기
             else if (status[1] == 2){
                 pubPlate.publish(forward);
                 status[1] = 3;
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
         }
     }
@@ -253,46 +261,52 @@ public:
             if (status[1] == 1){
                 //1번 테이블 쟁반 서빙
                 if (status[0] == 1){
-                    ROS_INFO("Serve to Table 1\n");
+                    ROS_INFO("Serve to Table 1");
                     pubPoseStamped.publish(poseStampedTable[0]);
                     status[1] = 0;
+                    ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 }
                 //2번 테이블 쟁반 서빙
                 else if (status[0] == 2){
-                    ROS_INFO("Serve to Table 2\n");
+                    ROS_INFO("Serve to Table 2");
                     pubPoseStamped.publish(poseStampedTable[1]);
                     status[1] = 0;
+                    ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 }
             }
 
             else if (status[1] == 0){
                 //1번 테이블 서빙 마침
                 if (status[0] == 1){
-                    ROS_INFO("Ultra Sensor Publish\n");
+                    ROS_INFO("Ultra Sensor Publish");
                     ultra.data = 3;
                     pubUltra.publish(ultra);
                     status[0] = 5;
+                    ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 }
                 //2번 테이블 서빙 마침
                 else if (status[0] == 2){
-                    ROS_INFO("Ultra Sensor Publish\n");
+                    ROS_INFO("Ultra Sensor Publish");
                     ultra.data = 4;
                     pubUltra.publish(ultra);
                     status[0] = 5;
+                    ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 }
                 //각 테이블 회수 단계
                 else if (status[0] == 3 || status[0] == 4){
                     ROS_INFO("Go to Table to return a plate");
                     pubPoseStamped.publish(poseStampedTable[2]);
                     status[1] = 2;
+                    ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
                 }
             }
             //쟁반 회수 후 초기 위치 복귀
             else if (status[1] == 3){
-                ROS_INFO("Ultra Sensor Publish\n");
+                ROS_INFO("Ultra Sensor Publish");
                 ultra.data = 3;
                 pubUltra.publish(ultra);
                 status[0] = 5;
+                ROS_INFO("[0] = %d [1] = %d [2] = %d\n", status[0], status[1], status[2]);
             }
         }
     }
