@@ -81,6 +81,7 @@ public:
     }
     
     void turn(int b){
+        clock_t start;
         if (b == 1){
             cmd_vel.angular.z = 0.523599; //1.5708rad = 90deg/s, 0.523599rad = 30deg/s
         }
