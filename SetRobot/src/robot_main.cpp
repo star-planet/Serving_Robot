@@ -168,7 +168,7 @@ int main(int argc, char**argv){
     GPIO::setup(Trig, GPIO::OUT);
     GPIO::setup(Echo, GPIO::IN);
     
-    ROS_INFO("SET UP ULTRA SENSOR"):
+    ROS_INFO("SET UP ULTRA SENSOR");
 
     Main main;
 
