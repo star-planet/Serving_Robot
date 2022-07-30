@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mca_pr2_navigation</name>
+  <version>0.0.1</version>
+  <description>
+    Navigation for mca pr2 robot.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="as379907as@gmail.com">Hyun</author>
+  <maintainer email="as379907as@gmail.com">Hyun</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>mca_pr2_bringup</exec_depend>
+</package>
