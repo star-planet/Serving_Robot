@@ -1,0 +1,14 @@
+<launch>
+  <arg name="multi_robot_name" default=""/>
+  <arg name="set_lidar_frame_id" default="base_scan"/>
+  <arg name="model" default="burger"/>
+
+  <include file="$(find mca_pr2_bringup)/launch/mca_pr2_core.launch">
+    <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
+  </include>
+  <include file="$(find mca_pr2_bringup)/launch/mca_pr2_lidar.launch">
+    <arg name="set_frame_id" value="$(arg set_lidar_frame_id)"/>
+  </include>
+
+  <node pkg="mca_pr2_bringup" type="turtlebot3_diagnostics" name="mca_pr2_diagnostics" output="screen"/>
+</launch>
