@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mca_pr2_description)/rviz/model.rviz"/>
+</launch>
