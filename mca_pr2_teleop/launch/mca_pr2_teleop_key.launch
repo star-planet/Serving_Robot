@@ -1,4 +1,0 @@
-<launch>
-  <!-- keyboard teleoperation -->
-  <node pkg="mca_pr2_teleop" type="mca_pr2_teleop_key" name="mca_pr2_teleop_keyboard"  output="screen"/>
-</launch>
