@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mca_pr2_slam</name>
+  <version>0.0.1</version>
+  <description>
+    Slam for mca pr2 robot.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="as379907as@gmail.com">Hyun</author>
+  <maintainer email="as379907as@gmail.com">Hyun</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>sensor_msgs</depend>
+  <exec_depend>turtlebot3_bringup</exec_depend>
+</package>

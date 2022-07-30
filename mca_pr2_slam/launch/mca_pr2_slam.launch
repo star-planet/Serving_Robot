@@ -1,0 +1,17 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="configuration_basename" default="mca_pr2.lua"/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- Pr2 -->
+  <include file="$(find mca_pr2_bringup)/launch/mca_pr2_remote.launch"/>
+
+  <!-- Slam -->
+  <include file="$(find mca_pr2_slam)/launch/mca_pr2_gmapping.launch"/>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find mca_pr2_slam)/rviz/mca_pr2_gmapping.rviz"/>
+  </group>
+</launch>

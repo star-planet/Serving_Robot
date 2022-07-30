@@ -1,0 +1,30 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="map_file" default="$(find mca_pr2_navigation)/maps/map.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- PR2 -->
+  <include file="$(find mca_pr2_bringup)/launch/mca_pr2_remote.launch">
+  </include>
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <include file="$(find mca_pr2_amcl)/launch/amcl.launch"/>
+
+  <!--Map auto clearing-->
+  <node pkg="mca_pr2_navigation" name="auto_clear_map" type="clear_costmap_service" output="screen"/>
+
+  <!-- move_base -->
+  <include file="$(find mca_pr2_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find mca_pr2_navigation)/rviz/mca_pr2_navigation.rviz"/>
+  </group>
+</launch>
