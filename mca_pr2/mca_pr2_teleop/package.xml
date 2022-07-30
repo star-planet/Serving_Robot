@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>MCA_pr2_teleop</name>
+  <version>0.0.1</version>
+  <description>
+    Teleoperation for pr2 robot.
+  </description>
+  <license>BSD</license>
+  <author>Melonee Wise</author>
+  <author email="as379907as@gmail.com">Hyun</author>
+  <maintainer email="as379907as@gmail.com">Hyun</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>geometry_msgs</depend>
+</package>
