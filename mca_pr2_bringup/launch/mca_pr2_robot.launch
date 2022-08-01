@@ -1,7 +1,6 @@
 <launch>
   <arg name="multi_robot_name" default=""/>
   <arg name="set_lidar_frame_id" default="base_scan"/>
-  <arg name="model" default="burger"/>
 
   <include file="$(find mca_pr2_bringup)/launch/mca_pr2_core.launch">
     <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
