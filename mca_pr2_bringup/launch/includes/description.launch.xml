@@ -1,0 +1,4 @@
+<launch>
+  <arg name="urdf_file" default="$(find xacro)/xacro '$(find mca_pr2_description)/urdf/mca_pr2.urdf.xacro'" />
+  <param name="robot_description" command="$(arg urdf_file)" />
+</launch>

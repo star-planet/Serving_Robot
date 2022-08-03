@@ -1,0 +1,47 @@
+DWAPlannerROS:
+
+# 로봇 파라미터 설정
+  max_vel_x: 0.22           # x축 최대 속도
+  min_vel_x: -0.22          # x축 최소 속도
+
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+
+# The velocity when robot is moving in a straight line
+  max_vel_trans:  0.22      # 최대 병진속도
+  min_vel_trans:  0.11      # 최소 병진속도(음수면 후진 가능)
+
+  max_vel_theta: 1.9        # 최대 회전속도
+  min_vel_theta: 1.0        # 최소 회전속도
+
+  acc_lim_x: 2.5            # x축 가속도 제한
+  acc_lim_y: 0.0            # y축 가속도 제한
+  acc_lim_theta: 3.2        # theta축 각가속도 제한
+
+# Goal Tolerance Parametes
+  xy_goal_tolerance: 0.05   # x, y 거리 목표지점 허용오차
+  yaw_goal_tolerance: 0.05  # yaw축 목표지점 허용오차
+  latch_xy_goal_tolerance: false  # 목표지점 도착 시 한바퀴 회전 유무
+
+# Forward Simulation Parameters
+  sim_time: 1.5             # 전방향 시물레이션 궤적 시간
+  vx_samples: 20            # x 축 속도 공간에서 탐색하는 샘플 수
+  vy_samples: 0             # y 축 속도 공간에서 탐색하는 샘플 수
+  vth_samples: 40           # theta 축 속도 공간에서 탐색하는 샘플 수
+  controller_frequency: 10.0
+
+# Trajectory Scoring Parameters
+  path_distance_bias: 32.0       # 컨트롤러가 주어진 경로를 얼마나 따르는가에 대한 가중치
+  goal_distance_bias: 20.0       # 목표지점과 제어 속도에 근접한지에 대한 가중치
+  occdist_scale: 0.04            # 장애물 회피에 대한 가중치
+  forward_point_distance: 0.325  # 로봇 중점과 추가 스코어링 포인트와의 거리
+  stop_time_buffer: 0.2          # 로봇이 충돌 전 정지에 필요한 시간
+  scaling_speed: 0.25            # 스케일링 속도
+  max_scaling_factor: 0.2        # 최대 스케일링 요소
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05
+
+# Debugging
+  publish_traj_pc : true
+  publish_cost_grid_pc: true
