@@ -1,5 +1,3 @@
-//왔다 갔다는 가능 하지만 한쪽에서 두번 보내지면 안됌.
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -88,7 +86,7 @@ int main(int argc, char* argv[])
 	}
 
 	clilen = sizeof(cliaddr);
-	while(1){
+	
 		if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clilen)) < 0)
 		{
 			perror("accept error.\n");
@@ -96,7 +94,8 @@ int main(int argc, char* argv[])
 		}
 
 		printf("server: got connection from %s\n", inet_ntoa(cliaddr.sin_addr));
-
+		
+	while(1){
 		// 메시지 수신하는 스레드 생성
 		if(pthread_create(&thread[0] , NULL , recv_message, &connfd) == -1)
 		{
