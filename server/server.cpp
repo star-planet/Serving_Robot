@@ -1,115 +1,191 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include <errno.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <arpa/inet.h>
-#include <pthread.h>
+#include <sys/socket.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
+#include <thread>
+#include <iostream>
+#include <fstream>
 
+#define BUFSIZE 4096
 #define PORT 8080
 
-const int MAX_LINE = 2048;
-const int BACKLOG = 10;
-const int LISTENQ = 6666;
-const int MAX_CONNECT = 20;
+using namespace std;
 
+void error_handling(char* message);
 
-// 클라이언트로부터 메시지 수신
-void *recv_message(void *fd)
-{
-	int sockfd = *(int *)fd;
-	while(1)
-	{
-		char buf[MAX_LINE];
-		memset(buf , 0 , MAX_LINE);
-		int n;
-		if((n = recv(sockfd , buf , MAX_LINE, 0)) == -1)
-		{
-			perror("recv error.\n");
-			exit(1);
-		}
-		buf[n] = '\0';
+class Socket{
+    
+    protected:
+    int serv_sock;
 
-        // 클라이언트가 갑자기 접속을 끊은 경우 처리 
-        if (n==0)
-        {
-			printf("Client closed.\n");
-			close(sockfd);
-			exit(1);
+    public:
+    Socket(){
+        serv_sock = socket(AF_INET, SOCK_STREAM, 0);
+    }
+   
+};
+
+class ServerSocket : public Socket{    
+    private:
+    int clnt_sock;
+    pthread_t tid;
+    char temp[20];
+
+    public:
+    bool BindSocket(){
+        struct sockaddr_in addr;
+        bzero((char*)&addr, sizeof(addr));
+        
+        addr.sin_family = AF_INET;
+        addr.sin_addr.s_addr = htonl(INADDR_ANY);
+        addr.sin_port = htons(PORT);
+
+        int val = 1;    
+        if (setsockopt(serv_sock, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof val) < 0) {
+            perror("setsockopt");
+            close(serv_sock);
+            return -1;
         }
-		printf("Client: %s", buf);
-	}
-}
 
-int main(int argc, char* argv[])
-{
-	int listenfd , connfd;
-	socklen_t clilen;
-	pthread_t thread[2];
-
-	struct sockaddr_in servaddr , cliaddr;
-	
-	if((listenfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
-	{
-		perror("socket error.\n");
-		exit(1);
-	}
-
-
-	bzero(&servaddr , sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servaddr.sin_port = htons(PORT);
-
-    // bind 오류 해결. 사용했던 ip라고 뜨는 에러. 
-    int val = 1;    
-    if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof val) < 0) {
-        perror("setsockopt");
-        close(listenfd);
-	    return -1;
+        int flag = bind(serv_sock, (struct sockaddr*) &addr, sizeof(addr));
+        if (flag == -1)
+            return false;
+        else
+            return true;
     }
 
-	if(bind(listenfd , (struct sockaddr *)&servaddr , sizeof(servaddr)) < 0)
-	{
-		perror("bind error.\n");
-		exit(1);
-	}
+    bool ListenSocket(int num){
+        int flag = listen(serv_sock, num );
+        if (flag == -1)
+            return false;
+        else
+            return true;
+    }
 
-	if(listen(listenfd , LISTENQ) < 0)
-	{
-		perror("listen error.\n");
-		exit(1);
-	}
+    bool AcceptSocket(){
+        struct sockaddr_in addr;
+        socklen_t addr_size;
+        addr_size = sizeof(addr);
+        clnt_sock = accept(serv_sock, (struct sockaddr *)&addr, &addr_size);
+        
+        if (clnt_sock == -1)
+            return false;
+        else
+            inet_ntop(AF_INET, &addr.sin_addr.s_addr, temp, sizeof(temp));
+            cout << "[ INFO] Client IP: " << temp << endl; 
+            return true;
+    }
 
-	clilen = sizeof(cliaddr);
-	
-		if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clilen)) < 0)
-		{
-			perror("accept error.\n");
-			exit(1);
-		}
+    bool SendMsg(){
+        while(1){
+            char buf[BUFSIZE];
+            memset(buf , 0 , BUFSIZE);
 
-		printf("server: got connection from %s\n", inet_ntoa(cliaddr.sin_addr));
-		
-	while(1){
-		// 메시지 수신하는 스레드 생성
-		if(pthread_create(&thread[0] , NULL , recv_message, &connfd) == -1)
-		{
-			perror("pthread create error.\n");
-			exit(1);
-		}
+            ifstream input("/home/hyun/socket2");
+            input >> buf;
+            input.close();
 
-		char msg[MAX_LINE];
-		memset(msg , 0 , MAX_LINE);
-		if(fgets(msg , MAX_LINE , stdin) != NULL)	
-		{	
-			send(connfd , msg , strlen(msg) , 0);
-		}
-	}
+            int n;
+            if((n = send(clnt_sock , buf , strlen(buf) , 0)) == -1){
+                perror("send error.\n");
+            }
 
-	return 0;
+            buf[n] = '\0';
+
+            if(n == 1){
+                perror("[ INFO] Status");
+                cout << "[ INFO] Server: " << buf << "\n" << endl;
+                ofstream output("/home/hyun/socket2");
+                output.close();                
+            }
+        }
+    }
+
+    static void* ReceiveMsg(void* data){
+        int sockfd = *(int*)data;
+        while (1){
+            char buf[BUFSIZE];
+            memset(buf , 0 , BUFSIZE);
+            int n;
+            if((n = recv(sockfd , buf , BUFSIZE, 0)) == -1){
+                perror("recv error.\n");
+                exit(1);
+            }
+
+            buf[n] = '\0';
+
+            if (n == 0){
+                printf("Client closed.\n");
+                close(sockfd);
+                exit(1);
+            }
+
+            perror("[ INFO] Status");
+            printf("[ INFO] Client: %s\n", buf);
+
+            ofstream output("/home/hyun/socket", ios::trunc);
+            output << buf;
+            output.close();
+        }
+    }
+
+    void ReceiveMsg_Thread(){
+        pthread_create(&tid, NULL, ReceiveMsg, &clnt_sock);
+    }
+    
+    void CloseListenSocket(){
+        close(serv_sock);
+    }
+    
+    void CloseAcceptSocket(){
+        close(clnt_sock);
+    }
+
+
+};
+
+int main ( int argc, char * argv[]){
+    cout << " ______________________________ " << endl;
+    cout << "|                              |" << endl;
+    cout << "|      MCA TCP/IP Server       |" << endl;
+    cout << "|______________________________|\n" << endl;
+    
+
+    int state;
+    pid_t pid;
+
+    ServerSocket serv_sock;
+
+    if(!(serv_sock.BindSocket()))
+        error_handling("bind() error.\n");
+
+    if(!(serv_sock.ListenSocket(5)))
+        error_handling("Listen() error.\n");
+
+    while(1){
+        if(!(serv_sock.AcceptSocket()))
+            continue;
+        else
+            puts("[ INFO] Server: New client connected.\n");
+
+        pid = fork();
+
+        if (pid == 0){
+            serv_sock.ReceiveMsg_Thread();
+            serv_sock.SendMsg();
+            return 0;
+        }
+    }
+    serv_sock.CloseListenSocket();
+    return 0;   
+}
+
+void error_handling(char* message){
+    fputs(message, stderr);
+    fputc('\n', stderr);
+    exit(1);
 }
