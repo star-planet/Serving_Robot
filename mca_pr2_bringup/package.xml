@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mca_pr2_bringup</name>
+  <version>1.2.6</version>
+  <description>
+    Scripts for pr2 robot.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="as379907as@gmail.com">Hyun</author>
+  <maintainer email="as379907as@gmail.com">Hyun</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>turtlebot3_msgs</depend>
+  <exec_depend>mca_pr2_description</exec_depend>
+  <exec_depend>mca_pr2_teleop</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rosserial_python</exec_depend>
+  <exec_depend>hls_lfcd_lds_driver</exec_depend>
+</package>
