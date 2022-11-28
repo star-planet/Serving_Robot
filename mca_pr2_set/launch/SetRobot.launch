@@ -1,0 +1,7 @@
+<launch>
+  <rosparam file="$(find mca_pr2_set)/param/target_pose.yaml" command="load" />
+
+  <!-- Set robot -->
+  <node pkg="mca_pr2_set" type="robot_setpose" name="pose" output="screen"/>
+  <node pkg="mca_pr2_set" type="robot_expo" name="master" output="screen"/>
+</launch>
