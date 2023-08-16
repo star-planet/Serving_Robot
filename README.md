@@ -12,7 +12,7 @@
 
 서빙 및 전달, 회수
 
-### 프로그램
+### 사용 프로그램
 
 ROS, C/C++, Kotlin
 
@@ -20,17 +20,17 @@ ROS, C/C++, Kotlin
 
 Jetson Nano, RaspberryPi 4, OpenCR 1.0
 
-### 운영체제
+### 사용 운영체제
 
 Ubuntu 18.04, ROS Melodic, Android
 
 ### 부품
 
-LDS-01 (Lidar Sensor)
+LDS-01
 
-HC-SR04 (Ultrasonic Sensor)
+HC-SR04
 
-MX-106 (Dynamixel Motor)
+MX-106
 
 Step Motor
 
@@ -38,7 +38,7 @@ Step Motor
 
 DC Motor
 
-## 수상 경력
+### 수상 경력
 
 동양미래EXPO 최우수상
 
@@ -47,3 +47,5 @@ DC Motor
 산학협력EXPO 최우수상(산학협동재단)
 
 공학페스티벌 동상
+
+기술창업 아이디어 경진대회 장려상
