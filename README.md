@@ -1,7 +1,7 @@
 # 자율 주행 식당 무인 서빙 로봇
 > Unmanned Serving Robot
->
-> **주요 코드는 server와 set에 있습니다.**
+
+**주요 코드는 server와 set에 있습니다.**
 
 ## 1. 제작기간
 - 2022.7 ~ 2022.10
